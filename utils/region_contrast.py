@@ -6,6 +6,12 @@ from Models.Multi_Modal_Seg.UNet import Upsample_3D
 import torch
 
 def judge_iou(bbox1,bbox2):
+    """
+     judge whether two boxes have intersections
+     :param bbox1:
+     :param bbox2:
+     :return:
+     """
     x1,y1,z1,w1,h1,d1 = bbox1
     x2,y2,z2,w2,h2,d2 = bbox2
     w = min(x1+w1,x2+w2)-max(x1,x2)
@@ -14,6 +20,9 @@ def judge_iou(bbox1,bbox2):
     return w<=0 or h<=0 or z<=0
 
 def adjust_boarders(boraders,size):
+    """
+    adjust borders
+    """
     new_boarders = []
     for borader in boraders:
         l,r = borader[0],borader[1]
@@ -26,6 +35,9 @@ def adjust_boarders(boraders,size):
     return new_boarders
 
 def sample_positive_tuple(img,gt,size=16,num_pos=3):
+    """
+    
+    """
     c, W, H, Z = img.shape
     args = np.argwhere(gt.cpu().numpy() == 1)
     min_x, max_x, min_y, max_y, min_z, max_z = min(args[:, 0]), max(args[:, 0]), min(args[:, 1]), max(args[:, 1]), min(

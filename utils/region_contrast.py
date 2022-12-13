@@ -36,7 +36,12 @@ def adjust_boarders(boraders,size):
 
 def sample_positive_tuple(img,gt,size=16,num_pos=3):
     """
-    
+    sample multiple boarders for positive regions
+    :param img: 
+    :param gt: 
+    :param size: 
+    :param num_pos: 
+    :return: sampled boarders of positive regions
     """
     c, W, H, Z = img.shape
     args = np.argwhere(gt.cpu().numpy() == 1)

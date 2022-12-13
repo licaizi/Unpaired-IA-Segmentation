@@ -189,7 +189,19 @@ def self_dif_other_contrast_loss(src_regions,trg_regions,num_keys=8,temperature=
     return ce_loss(logits,labels),ce_loss(self_logits,labels)
 
 def intra_inter_contrast_loss(src_regions,trg_regions,num_keys=8,temperature=5.,mine_hard=False,hard_samples=8):
-    #cross-contrast:negative keys from other modality
+    """
+    intra modality contrast loss and inter modality contrast loss
+    Args:
+        src_regions:
+        trg_regions:
+        num_keys:
+        temperature:
+        mine_hard:
+        hard_samples:
+
+    Returns:
+
+    """
     n,out = src_regions.shape
     src_regions = src_regions.view(n//(num_keys+3),num_keys+3,out)
     trg_regions = trg_regions.view(n // (num_keys + 3), num_keys + 3, out)
@@ -267,7 +279,7 @@ def LMI_contrast_loss(trg_embed,src_embed,src_regions,trg_regions,num_keys=100,t
 
 def LMI_cross_contrast_loss(trg_embed,src_embed,src_regions,trg_regions,num_keys=100,temperature=0.1):
     '''
-
+    LMI loss cross modality
     :param trg_embed: n,dim
     :param src_embed: n,dim
     :param src_regions: n*(key+3),dim

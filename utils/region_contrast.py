@@ -2,7 +2,7 @@ import numpy as np
 import random
 import torch.nn as nn
 from torch.nn import CrossEntropyLoss
-from Models.Multi_Modal_Seg.UNet import Upsample_3D
+from models.Multi_Modal_Seg.UNet import Upsample_3D
 import torch
 
 def judge_iou(bbox1,bbox2):
@@ -62,6 +62,16 @@ def sample_positive_tuple(img,gt,size=16,num_pos=3):
     return pos_anchors
 
 def sample_region(img,gt,size=16,num_keys=8):
+    """
+    Args:
+        img:
+        gt:
+        size:
+        num_keys:
+
+    Returns:
+
+    """
     c,W,H,Z = img.shape
     args = np.argwhere(gt.cpu().numpy() == 1)
     # print(args.shape[0],args.shape,'size of nonzero')
@@ -431,7 +441,8 @@ def sample_multi_modal_context_regions(src_img,src_gt,trg_img,trg_gt,size=16,num
     :param trg_gt:
     :param size:
     :param num_keys:
-    :return:
+    :return:src_sample_regions contain trg anchor,src positive regions and src negative regions,
+    trg_sample_regions contain src anchor,trg positive regions and trg negative regions
     '''
     c, W, H, Z = src_img.shape
     src_query_borders = sample_positive_tuple(src_img, src_gt, size=size,num_pos=pos_num)
@@ -641,6 +652,21 @@ def generate_batch_mulmod_allother_regions(src_img_batch,src_gt_batch,trg_img_ba
 
 def generate_batch_mulmod_context_regions(src_img_batch,src_gt_batch,trg_img_batch,trg_gt_batch,num_pos=3,
                                           size=16,num_keys=8,moco=False):
+    """
+    generate positive and negative regions for multi modality
+    Args:
+        src_img_batch:
+        src_gt_batch:
+        trg_img_batch:
+        trg_gt_batch:
+        num_pos:
+        size:
+        num_keys:
+        moco:
+
+    Returns:
+
+    """
     bth_size = src_img_batch.shape[0]
     # anchor_regions = []
     src_sampled_regions,trg_sampled_regions = [],[]

@@ -496,7 +496,7 @@ class MatricLayer(nn.Module):
         lineared_x = pooled_x
         for module in self.mlp:
             lineared_x = module(lineared_x)
-        # print(pooled_x.shape)
+
         x = F.normalize(lineared_x,dim=1,p=2)
         return x
 

@@ -6,7 +6,7 @@ from loss.Dice_loss import SoftDiceLoss
 from Multi_Modal_Seg.Dual_Stream_Network import Encoder,LatentEncoder,Decoder
 from Multi_Modal_Seg.UNet import Unet_3D,SeperateBnUnet_3D,MatricLayer,\
     Unet_3D_IN,Unet_3D_Contrast,RegionModule,Unet_3D_MultiScale_Contrast
-
+from utils_Train.Utils_Train import init_weights
 from Multi_Modal_Seg.mb_builder import RegionCo
 
 args = get_arguments()
@@ -47,6 +47,7 @@ final_nonlin = lambda x: x
 def config_model(contains_feat = False):
     #define model
     model = Unet_3D(1,16,2)
+    init_weights(model)
     # define loss func
     criterion = SoftDiceLoss(apply_nonlin=softmax_helper, batch_dice=True, do_bg=False, smooth=1e-7)
     if contains_feat:
@@ -63,6 +64,7 @@ def config_model(contains_feat = False):
 def config_dsbn_model():
     #define model
     model = SeperateBnUnet_3D(1,16,2,2)
+    init_weights(model)
     # define loss func
     criterion = SoftDiceLoss(apply_nonlin=softmax_helper, batch_dice=True, do_bg=False, smooth=1e-7)
     # define optimizer
@@ -73,6 +75,7 @@ def config_dsbn_model():
 def config_region_dsbn_model(cotain_logits=False,size=16):
     #define model
     model = SeperateBnUnet_3D(1,16,2,2)
+    init_weights(model)
     if cotain_logits:
         region_model = RegionModule(16,16,16,size)
     else:
@@ -87,6 +90,7 @@ def config_region_dsbn_model(cotain_logits=False,size=16):
 def config_IN_model(contains_feat=False):
     #define model
     model = Unet_3D_IN(1,16,2,norm_type="IN")
+    init_weights(model)
     # define loss func
     criterion = SoftDiceLoss(apply_nonlin=softmax_helper, batch_dice=True, do_bg=False, smooth=1e-7)
     if contains_feat:
@@ -105,6 +109,7 @@ def config_IN_model(contains_feat=False):
 def config_region_model(cotain_logits=False,size=16,out_dim=128):
     #define model
     model = Unet_3D_Contrast(1,16,2)
+    init_weights(model)
     if cotain_logits:
         region_model = RegionModule(16,16,out_dim,size)
     else:
@@ -119,10 +124,12 @@ def config_region_model(cotain_logits=False,size=16,out_dim=128):
 def config_LMI_region_model(cotain_logits=False,size=16,out_dim=128):
     #define model
     model = Unet_3D_Contrast(1,16,2)
+    init_weights(model)
     if cotain_logits:
         region_model = RegionModule(16,16,out_dim,size)
     else:
         region_model = RegionModule()
+    init_weights(region_model)
     global_embed = MatricLayer(16,out_dim,out_dim)
     # define loss func
     criterion = SoftDiceLoss(apply_nonlin=softmax_helper, batch_dice=True, do_bg=False, smooth=1e-7)
@@ -143,6 +150,7 @@ def config_multiscale_region_model(cotain_logits=False,size=16,out_dim=128,scale
     else:
         region_model = RegionModule()
     # define loss func
+    init_weights(model)
     criterion = SoftDiceLoss(apply_nonlin=softmax_helper, batch_dice=True, do_bg=False, smooth=1e-7)
     optimizer = torch.optim.Adam([{'params':model.parameters()},
                                       {'params':region_model.parameters()}],INITIAL_LR, weight_decay=WEIGHT_DECAY, amsgrad=True)
@@ -152,9 +160,12 @@ def config_multiscale_region_model(cotain_logits=False,size=16,out_dim=128,scale
 def config_multi_region_model(cotain_logits=False,src_size=24,trg_size=16,out_dim=128):
     #define model
     model = Unet_3D_Contrast(1,16,2)
+    init_weights(model)
     if cotain_logits:
         src_region_model = RegionModule(16,16,out_dim,src_size)
+        init_weights(src_region_model)
         trg_region_model = RegionModule(16, 16, out_dim, trg_size)
+        init_weights(trg_region_model)
     else:
         region_model = RegionModule()
     # define loss func
@@ -167,10 +178,12 @@ def config_multi_region_model(cotain_logits=False,src_size=24,trg_size=16,out_di
 def config_region_moco_model(cotain_logits=False,size=16,T=0.1,k=256,sample_k=16):
     #define model
     model = Unet_3D_Contrast(1,16,2)
+    init_weights(model)
     if cotain_logits:
         region_moco_model = RegionCo(dim=16,K=k,m=0.999,T=T,region_size=size,sample_k=sample_k)
     else:
         region_moco_model = RegionModule()
+    init_weights(region_moco_model)
     # define loss func
     criterion = SoftDiceLoss(apply_nonlin=softmax_helper, batch_dice=True, do_bg=False, smooth=1e-7)
     optimizer = torch.optim.Adam([{'params':model.parameters()},
@@ -186,6 +199,8 @@ def config_dual_model():
     latent_encoder = LatentEncoder(256, 256)
     src_decoder = Decoder(16, 2)
     trg_decoder = Decoder(16, 2)
+    for model in [src_encoder,trg_encoder,latent_encoder,src_decoder,trg_decoder]:
+        init_weights(model)
     # define loss func
     criterion = SoftDiceLoss(apply_nonlin=softmax_helper, batch_dice=True, do_bg=False, smooth=1e-7)
     # define optimizer
@@ -211,6 +226,8 @@ def config_dualy_model():
     # latent_encoder = LatentEncoder(256, 256)
     src_decoder = Decoder(16, 2)
     trg_decoder = Decoder(16, 2)
+    for model in [encoder, src_decoder, trg_decoder]:
+        init_weights(model)
     # define loss func
     criterion = SoftDiceLoss(apply_nonlin=softmax_helper, batch_dice=True, do_bg=False, smooth=1e-7)
     # define optimizer

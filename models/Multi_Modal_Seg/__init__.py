@@ -1,5 +1,5 @@
 import importlib
-from Models.Base_model import BaseModel
+from models.Base_model import BaseModel
 
 def find_model_using_name(model_name):
     # Given the option --model [modelname],

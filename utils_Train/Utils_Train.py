@@ -2,6 +2,7 @@ import os
 import torch
 import shutil
 import numpy as np
+from torch.nn import init
 from models.Model_Utils import softmax_helper
 from batchgenerators.augmentations.utils import pad_nd_image
 from utils.Metrics import dice,jaccard,hausdorff_distance_95,sensitivity
@@ -380,9 +381,30 @@ def update_ema_variables(model, ema_model, alpha, global_step):
     for ema_param, param in zip(ema_model.parameters(), model.parameters()):
         ema_param.data.mul_(alpha).add_(1 - alpha, param.data)
 
-# result_root = '../results/MultiModality/new_multi_modality_dsbn_kd_fold{}'
-# file_list =[]
-# for i in range(5):
-#     root = result_root.format(i)
-#     file_list += os.listdir(root)
-# print(file_list)
+def init_weights(net, init_type='kaiming', gain=0.02):
+    def init_func(m):
+
+        classname = m.__class__.__name__
+        if hasattr(m, 'weight') and (classname.find('Conv') != -1 or classname.find('Linear') != -1):
+            if init_type == 'normal':
+                init.normal_(m.weight.data, 0.0, gain)
+            elif init_type == 'xavier':
+                init.xavier_normal_(m.weight.data, gain=gain)
+            elif init_type == 'kaiming':
+                init.kaiming_normal_(m.weight.data, a=0, mode='fan_in')
+            elif init_type == 'orthogonal':
+                init.orthogonal_(m.weight.data, gain=gain)
+            else:
+                raise NotImplementedError('initialization method [%s] is not implemented' % init_type)
+            if hasattr(m, 'bias') and m.bias is not None:
+                init.constant_(m.bias.data, 0.0)
+        elif classname.find('BatchNorm3d') != -1:
+            init.normal_(m.weight.data, 1.0, gain)
+            init.constant_(m.bias.data, 0.0)
+
+    print('initialize network with %s' % init_type)
+    net.apply(init_func)
+
+from models.Multi_Modal_Seg.UNet import Unet_3D,Unet_3D_IN
+model = Unet_3D_IN(1,16,2,norm_type="IN")
+init_weights(model)

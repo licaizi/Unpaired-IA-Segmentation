@@ -191,8 +191,8 @@ for epoch in range(EPOCHES):
 
     writer.add_scalar("mean_src_loss", sum(src_losses).data.item()/len(src_losses), epoch)
     writer.add_scalar("mean_trg_loss", sum(trg_losses).data.item() / len(trg_losses), epoch)
-    writer.add_scalar("mean_trg_selfco_loss", sum(intra_co_losses).data.item() / len(intra_co_losses), epoch)
-    writer.add_scalar("mean_trg_co_loss", sum(inter_co_losses).data.item() / len(inter_co_losses), epoch)
+    writer.add_scalar("mean_intra_co_loss", sum(intra_co_losses).data.item() / len(intra_co_losses), epoch)
+    writer.add_scalar("mean_inter_co_loss", sum(inter_co_losses).data.item() / len(inter_co_losses), epoch)
     writer.add_scalar("mean_total_loss", sum(total_losses).data.item() / len(total_losses), epoch)
     writer.add_scalar("mean_lmi_loss", sum(lmi_losses).data.item() / len(lmi_losses), epoch)
     writer.flush()

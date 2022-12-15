@@ -150,12 +150,7 @@ for epoch in range(EPOCHES):
                 'optimizer': optimizer.state_dict(),
             }
             save_checkpoint(state1, is_best1, CHECKPOINT_PATH, CHECKPOINT_NAME1.format(epoch), 'model_best.pth')
-state = {
-            'model': model.state_dict(),
-            'optimizer': optimizer.state_dict(),
-            }
-
-mean_dice, dices = validation(best_model, test_dataset)
+mean_dice, dices = validation(model, test_dataset)
 print_log("final validation on test set: mean_dice: {}".format(mean_dice), log)
 writer.close()
 log.close()

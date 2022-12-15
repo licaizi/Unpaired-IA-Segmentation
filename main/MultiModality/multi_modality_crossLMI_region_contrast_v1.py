@@ -222,7 +222,7 @@ for epoch in range(EPOCHES):
             }
             save_checkpoint(state, is_best, CHECKPOINT_PATH, CHECKPOINT_NAME1.format(epoch), 'model_best.pth')
 
-mean_dice, dices = validation(best_model, trg_test_dataset)
+mean_dice, dices = validation(model, trg_test_dataset)
 print_log("final validation on test set: mean_dice: {}".format(mean_dice), log)
 writer.close()
 log.close()

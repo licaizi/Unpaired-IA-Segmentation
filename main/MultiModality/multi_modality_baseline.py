@@ -1,22 +1,18 @@
-from Data_Augmentation import get_default_augmentation, default_3D_augmentation_params
-from Loss.Dice_loss import SoftDiceLoss, SoftDiceLossSquared, DC_and_CE_loss
-from Baseline.UNet import Generic_UNet
-from Data_Reader_CADA import get_labeled_data,mutithread_get_data,get_all_labeled_data
-from Data_Generator import DataGenerator3D
-from Data_Augmentation import get_default_augmentation
-from Models.Model_config import config_model
-from Utils_Train.Utils_Train import poly_lr, get_current_consistency_weight, update_ema_variables
-from Data_Preprocessing.Data_Utils import split_data
-# from contrast_loss import ContrastAllignmentLoss
-from Config.train_config import get_arguments
-from Utils_Train.Utils_Train import validation, print_log, save_checkpoint,save_final_checkpoint, pad_img_to_fit_network
+from data_preprocessing.Data_Augmentation import get_default_augmentation, default_3D_augmentation_params
+from loss.Dice_loss import SoftDiceLoss, SoftDiceLossSquared, DC_and_CE_loss
+from models.Baseline.UNet import Generic_UNet
+from data_preprocessing.Data_Reader_CADA import get_labeled_data,mutithread_get_data,get_all_labeled_data
+from data_preprocessing.Data_Generator import DataGenerator3D
+from data_preprocessing.Data_Augmentation import get_default_augmentation
+from models.Model_config import config_model
+from data_preprocessing.Data_Utils import split_data
+from config.train_config import get_arguments
+from utils_Train.Utils_Train import validation, print_log, save_checkpoint,save_final_checkpoint, pad_img_to_fit_network
 from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
-from image_pool import ImageQueue
-import torch.nn as nn
-import matplotlib.pyplot as plt
+
 import time
 import os
 import argparse
@@ -112,8 +108,7 @@ if torch.cuda.is_available():
     # print('cuda is avaliable')
     model.cuda()
 best_dice = 0.
-# src_que = ImageQueue(que_size=20)
-# trg_que = ImageQueue(que_size=20)
+
 def transform(train_img,train_label,scaled_label=None):
     if not isinstance(train_img, torch.Tensor):
         train_img = torch.from_numpy(train_img).float()
@@ -207,12 +202,8 @@ for epoch in range(EPOCHES):
                 'optimizer': optimizer.state_dict(),
             }
             save_checkpoint(state, is_best, CHECKPOINT_PATH, CHECKPOINT_NAME1.format(epoch), 'model_best.pth')
-state = {
-        'model': model.state_dict(),
-        'optimizer': optimizer.state_dict(),
-        }
-save_final_checkpoint(state, CHECKPOINT_PATH, CHECKPOINT_NAME1.format("final"))
-mean_dice, dices = validation(best_model, trg_test_dataset)
+
+mean_dice, dices = validation(model, trg_test_dataset)
 print_log("final validation on test set: mean_dice: {}".format(mean_dice), log)
 writer.close()
 log.close()

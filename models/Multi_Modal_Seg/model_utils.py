@@ -193,9 +193,6 @@ class ConvBlock3D(nn.Module):
         elif norm_type == "GN":
             self.norm1 = nn.GroupNorm(num_groups=8,num_channels=out_channel)
             self.norm2 = nn.GroupNorm(num_groups=8,num_channels=out_channel)
-        elif norm_type == "LN":
-            self.norm1 = nn.LayerNorm(normalized_shape=(out_channel,)+normalized_shape)
-            self.norm2 = nn.LayerNorm(normalized_shape=(out_channel,)+normalized_shape)
         else:
             self.norm1 = nn.InstanceNorm3d(num_features=out_channel)
             self.norm2 = nn.InstanceNorm3d(num_features=out_channel)

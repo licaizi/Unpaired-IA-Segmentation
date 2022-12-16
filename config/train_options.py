@@ -98,9 +98,9 @@ class TrainOptions(BaseOptions):
                             help='high value of the random uniform', )
         parser.add_argument('--pretrained_seg_path', type=str, default='../../checkpoints/Baseline_UNet/day26_1e-4_roicropDSA/model_best.pth',
                             help='path of the pretrained segmentation model', )
-        parser.add_argument('--pretrained_G_path', type=str, default='/home/hci/ruiqiang/DA/cta-projects-main/cta-seg/checkpoints/Image_translate/day10_image_transfer_BN_dropout_nolsGAN_diflr_Gfirst/experiment_name/latest_net_G.pth',
+        parser.add_argument('--pretrained_G_path', type=str, default='/cta-seg/checkpoints/Image_translate/day10_image_transfer_BN_dropout_nolsGAN_diflr_Gfirst/experiment_name/latest_net_G.pth',
                             help='path of the pretrained generator model', )
-        parser.add_argument('--pretrained_D_path', type=str, default='/home/hci/ruiqiang/DA/cta-projects-main/cta-seg/checkpoints/Image_translate/day10_image_transfer_BN_dropout_nolsGAN_diflr_Gfirst/experiment_name/latest_net_D.pth',
+        parser.add_argument('--pretrained_D_path', type=str, default='/cta-projects-main/cta-seg/checkpoints/Image_translate/day10_image_transfer_BN_dropout_nolsGAN_diflr_Gfirst/experiment_name/latest_net_D.pth',
                             help='path of the pretrained segmentation model', )
         parser.add_argument('--semmantic_lossname', type=str,
                             default='l1_loss',

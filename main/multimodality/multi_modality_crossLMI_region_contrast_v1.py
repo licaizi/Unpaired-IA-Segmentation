@@ -1,5 +1,5 @@
-from data_preprocessing.Data_Augmentation import get_default_augmentation, default_3D_augmentation_params
-from data_preprocessing.Data_Reader_CADA import get_labeled_data, mutithread_get_data,get_all_labeled_data
+from data_preprocessing.Data_Augmentation import default_3D_augmentation_params
+from data_preprocessing.Data_Reader_CADA import get_all_labeled_data
 from data_preprocessing.Data_Generator import DataGenerator3D
 from data_preprocessing.Data_Augmentation import get_default_augmentation
 from data_preprocessing.Data_Utils import split_data
@@ -116,6 +116,7 @@ if torch.cuda.is_available():
     model.cuda()
     region_model.cuda()
     global_embed.cuda()
+
 best_dice = 0.
 
 # training
@@ -125,6 +126,7 @@ for epoch in range(EPOCHES):
     for iter in range(BATCHES_OF_EPOCH):
         # loading data
         trg_train_batch = next(trg_train_gen)
+        # use augmented data which contains target
         while is_no_target(trg_train_batch):
             trg_train_batch = next(trg_train_gen)
         trg_train_img = trg_train_batch['data']

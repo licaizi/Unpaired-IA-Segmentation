@@ -659,12 +659,13 @@ def generate_batch_mulmod_context_regions(src_img_batch,src_gt_batch,trg_img_bat
         src_gt_batch:
         trg_img_batch:
         trg_gt_batch:
-        num_pos:
-        size:
-        num_keys:
-        moco:
+        num_pos:number of positive samples
+        size:region size
+        num_keys:number of negative samples
+        moco(bool):whether use memory bank
 
-    Returns:
+    Returns:sampled regions in trg and src,src_sampled_regions contain trg anchor,src positive regions and src negative regions,
+    trg_sampled_regions contain src anchor,trg positive regions and trg negative regions
 
     """
     bth_size = src_img_batch.shape[0]

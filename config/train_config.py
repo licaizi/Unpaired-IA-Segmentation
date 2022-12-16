@@ -96,16 +96,16 @@ def get_arguments():
                         help='1:InstanceNorm, 2: BatchNorm', )
     parser.add_argument('--data_type', type=str, default='CTA',
                         help='type of data', )
-    parser.add_argument('--log_path', type=str, default='../../logs/Baseline_UNet/day24_1e-4{}',
+    parser.add_argument('--log_path', type=str, default='../../logs/baseline_unet/day24_1e-4{}',
                         help='log path', )
-    parser.add_argument('--teacher_path', type=str, default='../../logs/Baseline_UNet/day24_1e-4{}',
+    parser.add_argument('--teacher_path', type=str, default='../../logs/baseline_unet/day24_1e-4{}',
                         help='saved path of teacher model', )
-    parser.add_argument('--src_pretrained_path', type=str, default='../../logs/Baseline_UNet/day24_1e-4{}',
+    parser.add_argument('--src_pretrained_path', type=str, default='../../logs/baseline_unet/day24_1e-4{}',
                         help='saved path of teacher model', )
     parser.add_argument('--model_path', type=str, default='', help='model path')
-    parser.add_argument('--checkpoint_path', type=str, default='../../checkpoints/Baseline_UNet/day24_1e-4{}',
+    parser.add_argument('--checkpoint_path', type=str, default='../../checkpoints/baseline_unet/day24_1e-4{}',
                         help='checkpoint path', )
-    parser.add_argument('--saved_root', type=str, default='../../results/Baseline_UNet/day24_1e-4{}',
+    parser.add_argument('--saved_root', type=str, default='../../results/baseline_unet/day24_1e-4{}',
                         help='save path', )
     parser.add_argument('--checkpoint_name1', type=str, default='checkpoint-CTA-{}.pth',
                         help='checkpoint name', )
@@ -113,9 +113,9 @@ def get_arguments():
                         help='final checkpoint name', )
     parser.add_argument('--checkpoint_name2', type=str, default='checkpoint2-{}.pth',
                         help='checkpoint name', )
-    parser.add_argument('--summary_writer', type=str, default='../../logs/Baseline_UNet/day24_1e-4{}',
+    parser.add_argument('--summary_writer', type=str, default='../../logs/baseline_unet/day24_1e-4{}',
                         help='checkpoint name', )
-    parser.add_argument('--pretrained_model', type=str, default='../../checkpoints/Baseline_UNet/day24_1e-4{}',
+    parser.add_argument('--pretrained_model', type=str, default='../../checkpoints/baseline_unet/day24_1e-4{}',
                         help='checkpoint name', )
     parser.add_argument('--ema_decay', type=float, default=0.99, help='ema_decay')
     parser.add_argument('--consistency_type', type=str, default="mse", help='consistency_type')

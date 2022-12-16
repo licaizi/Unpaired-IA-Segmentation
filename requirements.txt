@@ -8,9 +8,6 @@ cycler==0.11.0
 einops==0.4.1
 fonttools==4.31.2
 future==0.18.2
-google-auth==2.6.2
-google-auth-oauthlib==0.4.6
-grad-cam==1.4.0
 grpcio==1.44.0
 idna==3.3
 imageio==2.13.4

@@ -96,7 +96,7 @@ class TrainOptions(BaseOptions):
                             help='low value of the random uniform', )
         parser.add_argument('--cut_high', type=float, default=0.85,
                             help='high value of the random uniform', )
-        parser.add_argument('--pretrained_seg_path', type=str, default='../../checkpoints/Baseline_UNet/day26_1e-4_roicropDSA/model_best.pth',
+        parser.add_argument('--pretrained_seg_path', type=str, default='../../checkpoints/baseline_unet/day26_1e-4_roicropDSA/model_best.pth',
                             help='path of the pretrained segmentation model', )
         parser.add_argument('--pretrained_G_path', type=str, default='/cta-seg/checkpoints/Image_translate/day10_image_transfer_BN_dropout_nolsGAN_diflr_Gfirst/experiment_name/latest_net_G.pth',
                             help='path of the pretrained generator model', )

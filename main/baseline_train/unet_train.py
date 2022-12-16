@@ -5,6 +5,7 @@ from data_preprocessing.Data_Augmentation import get_default_augmentation
 from data_preprocessing.Data_Utils import split_data
 from models.Model_config import config_IN_model
 from config.train_config import get_arguments
+from utils.region_contrast import is_no_target
 from utils_Train.Utils_Train import validation, print_log, save_checkpoint
 from torch.utils.tensorboard import SummaryWriter
 import numpy as np
@@ -101,6 +102,9 @@ for epoch in range(EPOCHES):
     for iter in range(BATCHES_OF_EPOCH):
         # loading data
         train_batch = next(train_gen)
+        #use augmented data which contains target
+        while is_no_target(train_batch):
+            train_batch = next(train_batch)
         train_img = train_batch['data']
         train_label = train_batch['target']
 

@@ -1,12 +1,11 @@
 from data_preprocessing.Data_Augmentation import get_default_augmentation, default_3D_augmentation_params
-from loss.Dice_loss import SoftDiceLoss, SoftDiceLossSquared, DC_and_CE_loss
-from models.Baseline.UNet import Generic_UNet
 from data_preprocessing.Data_Reader_CADA import get_labeled_data,mutithread_get_data,get_all_labeled_data
 from data_preprocessing.Data_Generator import DataGenerator3D
 from data_preprocessing.Data_Augmentation import get_default_augmentation
 from models.Model_config import config_model
 from data_preprocessing.Data_Utils import split_data
 from config.train_config import get_arguments
+from utils.region_contrast import is_no_target
 from utils_Train.Utils_Train import validation, print_log, save_checkpoint,save_final_checkpoint, pad_img_to_fit_network
 from torch.utils.tensorboard import SummaryWriter
 import numpy as np
@@ -138,9 +137,14 @@ for epoch in range(EPOCHES):
     for iter in range(BATCHES_OF_EPOCH):
         # loading data
         trg_train_batch = next(trg_train_gen)
+        #use augmented data which contains target
+        while is_no_target(trg_train_batch):
+            trg_train_batch = next(trg_train_gen)
         trg_train_img = trg_train_batch['data']
         trg_train_label = trg_train_batch['target']
         src_train_batch = next(src_train_gen)
+        while is_no_target(src_train_batch):
+            src_train_batch = next(src_train_gen)
         src_train_img = src_train_batch['data']
         src_train_label = src_train_batch['target']
 
@@ -157,9 +161,9 @@ for epoch in range(EPOCHES):
             src_train_label = src_train_label.cuda(non_blocking=True)
 
         output,latent = model(trg_train_img,return_latent=True)
-        # trg_que.put(latent)
+
         src_output,src_latent = model(src_train_img,return_latent=True)
-        # src_que.put(src_latent)
+
         trg_loss = criterion(output,trg_train_label)
         writer.add_scalar("trg_loss/Dice", trg_loss.data.item(), epoch * BATCHES_OF_EPOCH + iter)
         writer.flush()

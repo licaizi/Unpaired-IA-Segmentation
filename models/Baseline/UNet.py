@@ -2,7 +2,7 @@ import torch
 import numpy as np
 from torch import nn
 from copy import deepcopy
-from Model_Utils import InitWeights_He, softmax_helper
+from models.Model_Utils import InitWeights_He, softmax_helper
 
 
 class ConvDropoutNormNonlin(nn.Module):
